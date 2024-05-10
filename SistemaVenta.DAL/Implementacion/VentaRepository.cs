@@ -33,7 +33,10 @@ namespace SistemaVenta.DAL.Implementacion
                     foreach (DetalleVenta dv in entidad.DetalleVenta) { 
                     
                         Producto producto_encontrado = _dbContext.Productos.Where(p => p.IdProducto == dv.IdProducto).First();
-
+                        if (dv.Cantidad > producto_encontrado.Stock)
+                        {
+                            throw new Exception("Excede el stock disponible.");
+                        }
                         producto_encontrado.Stock = producto_encontrado.Stock - dv.Cantidad;
                         _dbContext.Productos.Update(producto_encontrado);
                     }
